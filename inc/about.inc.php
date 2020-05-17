@@ -5,15 +5,26 @@
 
 <!-- ABOUT -->
 
+<?php
+$mysqli = new Mysqli("localhost", "root", "", "sitecv_php");
+//-----------------------------------------------------------------
+// Affichage (SELECT) :
+$result = $mysqli->query("SELECT * FROM profil WHERE prenom='Alexis'");
+$profil = $result->fetch_assoc(); 
+
+echo "Bonjour je suis $profil[prenom] $profil[nom] j'habite au $profil[adresse]<br>";
+//-----------------------------------------------------------------
+?>
+
 <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
   <div class="w-100">
-    <h1 class="mb-0">Clarence
-      <span class="text-primary">Taylor</span>
+    <h1 class="mb-0"><?php echo "$profil[nom]";?>
+      <span class="text-primary"><?php echo "$profil[prenom]";?></span>
     </h1>
-    <div class="subheading mb-5">3542 Berry Street · Cheyenne Wells, CO 80810 · (317) 585-8468 ·
-      <a href="mailto:name@email.com">name@email.com</a>
+    <div class="subheading mb-5"><?php echo "$profil[adresse]";?>
+      <a href="mailto:name@email.com"><?php echo "$profil[mail]";?></a>
     </div>
-    <p class="lead mb-5">I am experienced in leveraging agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition.</p>
+    <p class="lead mb-5"><?php echo "$profil[description]";?></p>
     <div class="social-icons">
       <a href="#">
         <i class="fab fa-linkedin-in"></i>

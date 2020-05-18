@@ -4,8 +4,6 @@
       <div class="w-100">
         <h2 class="mb-5">Experience</h2>
 
-        <button type="button" class="btn btn-outline-primary">Ajouter Experience</button>
-
         <?php 
 
         // Affichage (SELECT) :
@@ -21,12 +19,13 @@
               <span class="text-primary"><?php echo "$experience[duree]"?></span>
             </div>
           </div>
+
           <?php
         }?>
       </div>
 
       <?php
-      if($_POST)
+      if($_POST and isset($_POST['ajouter']))
       {
         $result = $mysqli->query("INSERT INTO experience (poste, employeur, duree, info) VALUES ('$_POST[poste]', '$_POST[employeur]', '$_POST[duree]', '$_POST[info]')");
       }
@@ -41,8 +40,10 @@
         <input type="text" name="duree" placeholder="duree" id="duree" required=""><br><br>
         <label for="info">Description</label><br>
         <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
-        <input type="submit"><br><br>
+        <input type="submit" name="ajouter" value="Ajouter experience"><br><br>
       </form>
+
+
 
     </section>
 

@@ -6,30 +6,21 @@ if(!internauteEstConnecteEtEstAdmin()) header("location:../index.php");
 
 //--- SUPPRESSION TABLES ---//
 if(isset($_GET['action']) && $_GET['action'] == "suppressionExperience")
-{   // $contenu .= $_GET['id_produit']
-    $resultat = executeRequete("SELECT * FROM experience WHERE id=$_GET[id_produit]");
-    $experience_a_supprimer = $resultat->fetch_assoc();
-    if(!empty($experience_a_supprimer['photo']) && file_exists($chemin_photo_a_supprimer)) unlink($chemin_photo_a_supprimer);
+{   
     executeRequete("DELETE FROM experience WHERE id=$_GET[id_produit]");
-    $contenu .= '<div class="validation">Suppression du produit : ' . $_GET['id_produit'] . '</div>';
+    $contenu .= '<div class="validation">Suppression experience : ' . $_GET['id_produit'] . '</div>';
     $_GET['action'] = 'affichage';
 }
 elseif(isset($_GET['action']) && $_GET['action'] == "suppressionEducation")
-{   // $contenu .= $_GET['id_produit']
-    $resultat = executeRequete("SELECT * FROM education WHERE id=$_GET[id_produit]");
-    $education_a_supprimer = $resultat->fetch_assoc();
-    if(!empty($education_a_supprimer['photo']) && file_exists($chemin_photo_a_supprimer)) unlink($chemin_photo_a_supprimer);
+{   
     executeRequete("DELETE FROM education WHERE id=$_GET[id_produit]");
-    $contenu .= '<div class="validation">Suppression du produit : ' . $_GET['id_produit'] . '</div>';
+    $contenu .= '<div class="validation">Suppression education : ' . $_GET['id_produit'] . '</div>';
     $_GET['action'] = 'affichage';
 }
 elseif(isset($_GET['action']) && $_GET['action'] == "suppressionSkill")
-{   // $contenu .= $_GET['id_produit']
-    $resultat = executeRequete("SELECT * FROM skills WHERE id=$_GET[id_produit]");
-    $skill_a_supprimer = $resultat->fetch_assoc();
-    if(!empty($skill_a_supprimer['photo']) && file_exists($chemin_photo_a_supprimer)) unlink($chemin_photo_a_supprimer);
+{   
     executeRequete("DELETE FROM skills WHERE id=$_GET[id_produit]");
-    $contenu .= '<div class="validation">Suppression du produit : ' . $_GET['id_produit'] . '</div>';
+    $contenu .= '<div class="validation">Suppression skill : ' . $_GET['id_produit'] . '</div>';
     $_GET['action'] = 'affichage';
 }
 

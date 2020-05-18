@@ -6,13 +6,13 @@
 
         <?php 
 
-        $result = $mysqli->query("SELECT * FROM education");
+        $result = $mysqli->query("SELECT * FROM skills");
 
-        while($education = $result->fetch_assoc()){ ?>
+        while($skills = $result->fetch_assoc()){ ?>
         <ul class="fa-ul mb-0">
           <li>
             <i class="fa-li fa fa-check"></i>
-            <?php echo "$education[info]"?>
+            <?php echo "$skills[info]"?>
           </li>
         </ul><?php
         }?>

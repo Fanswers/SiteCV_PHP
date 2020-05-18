@@ -6,13 +6,11 @@
 <!-- ABOUT -->
 
 <?php
-$mysqli = new Mysqli("localhost", "root", "", "sitecv_php");
+
 //-----------------------------------------------------------------
 // Affichage (SELECT) :
 $result = $mysqli->query("SELECT * FROM profil WHERE prenom='Alexis'");
 $profil = $result->fetch_assoc(); 
-
-echo "Bonjour je suis $profil[prenom] $profil[nom] j'habite au $profil[adresse]<br>";
 //-----------------------------------------------------------------
 ?>
 

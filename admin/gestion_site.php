@@ -22,23 +22,34 @@ elseif(isset($_GET['action']) && $_GET['action'] == "suppressionSkill")
     executeRequete("DELETE FROM skills WHERE id=$_GET[id_produit]");
     $contenu .= '<div class="validation">Suppression skill : ' . $_GET['id_produit'] . '</div>';
     $_GET['action'] = 'affichage';
+} //--- Modifications tables ---//
+elseif($_POST and isset($_POST['validModifExperience']))
+{
+    executeRequete("UPDATE experience SET poste='$_POST[poste]', employeur='$_POST[employeur]', duree='$_POST[duree]', info='$_POST[info]' WHERE id=$_GET[id_produit]");
+}
+elseif($_POST and isset($_POST['validModifEducation']))
+{
+    executeRequete("UPDATE education SET etablissement='$_POST[etablissement]',formation='$_POST[formation]', duree='$_POST[duree]', info='$_POST[info]' WHERE id=$_GET[id_produit]");
+}
+elseif($_POST and isset($_POST['validModifSkill']))
+{
+    executeRequete("UPDATE skills SET info='$_POST[info]' WHERE id=$_GET[id_produit]");
 }
 
 
 //--- ENREGISTREMENT TABLES ---//
 if($_POST and isset($_POST['ajouterExperience']))
-      {
+    {
         $result = $mysqli->query("INSERT INTO experience (poste, employeur, duree, info) VALUES ('$_POST[poste]', '$_POST[employeur]', '$_POST[duree]', '$_POST[info]')");
-      }
+    }
 elseif($_POST and isset($_POST['ajouterEducation']))
-      {
+    {
         $result = $mysqli->query("INSERT INTO education (etablissement, formation, duree, info) VALUES ('$_POST[etablissement]', '$_POST[formation]', '$_POST[duree]', '$_POST[info]')");
-      }
+    }
 elseif($_POST and isset($_POST['ajouterSkill']))
-      {
+    {
         $result = $mysqli->query("INSERT INTO skills (info) VALUES ('$_POST[info]')");
-      }
-
+    }
 
 
 //--- LIENS ---//
@@ -77,7 +88,7 @@ if(isset($_GET['action']) && $_GET['action'] == "affichage")
                 $contenu .= '<td>' . $information . '</td>';
             }
         }
-        $contenu .= '<td><a href="?action=modificationExperience&id_produit=' . $ligne['id'] .'"><img src="../inc/img/edit.png"></a></td>';
+        $contenu .= '<td><a href="?action=modificationExperience&id_produit=' . $ligne['id'] .'">Modifier';
         $contenu .= '<td><a href="?action=suppressionExperience&id_produit=' . $ligne['id'] .'" OnClick="return(confirm(\'En êtes vous certain ?\'));">Supprimer';
         $contenu .= '</tr>';
     }
@@ -111,7 +122,7 @@ if(isset($_GET['action']) && $_GET['action'] == "affichage")
                 $contenu .= '<td>' . $information . '</td>';
             }
         }
-        $contenu .= '<td><a href="?action=modificationEducation&id_produit=' . $ligne['id'] .'"><img src="../inc/img/edit.png"></a></td>';
+        $contenu .= '<td><a href="?action=modificationEducation&id_produit=' . $ligne['id'] .'">Modifier';
         $contenu .= '<td><a href="?action=suppressionEducation&id_produit=' . $ligne['id'] .'" OnClick="return(confirm(\'En êtes vous certain ?\'));">Supprimer';
         $contenu .= '</tr>';
     }
@@ -145,7 +156,7 @@ if(isset($_GET['action']) && $_GET['action'] == "affichage")
                 $contenu .= '<td>' . $information . '</td>';
             }
         }
-        $contenu .= '<td><a href="?action=modificationSkill&id_produit=' . $ligne['id'] .'"><img src="../inc/img/edit.png"></a></td>';
+        $contenu .= '<td><a href="?action=modificationSkill&id_produit=' . $ligne['id'] .'">Modifier';
         $contenu .= '<td><a href="?action=suppressionSkill&id_produit=' . $ligne['id'] .'" OnClick="return(confirm(\'En êtes vous certain ?\'));">Supprimer';
         $contenu .= '</tr>';
     }
@@ -188,6 +199,46 @@ if(isset($_GET['action']) && $_GET['action'] == "ajout"){
     <label for="info">Info</label><br>
     <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
     <input type="submit" name="ajouterSkill" value="Ajouter skill"><br><br>
+    </form>
+    ';
+}
+elseif(isset($_GET['action']) && $_GET['action'] == "modificationExperience"){
+    echo'
+    <h2>EXPERIENCES</h2>
+    <form method="post">
+    <label for="poste">Poste</label><br>
+    <input type="text" name="poste" placeholder="poste" id="poste" required=""><br><br>
+    <label for="employeur">Employeur</label><br>
+    <input type="text" name="employeur" placeholder="employeur" id="employeur" required=""><br><br>
+    <label for="duree">Duree</label><br>
+    <input type="text" name="duree" placeholder="duree" id="duree" required=""><br><br>
+    <label for="info">Description</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="validModifExperience" value="Modifier experience"><br><br>
+    </form>';
+}
+elseif(isset($_GET['action']) && $_GET['action'] == "modificationEducation"){
+    echo'
+    <h2>EDUCATION</h2>
+    <form method="post">
+    <label for="etablissement">Etablissement</label><br>
+    <input type="text" name="etablissement" placeholder="etablissement" id="etablissement" required=""><br><br>
+    <label for="formation">Formation</label><br>
+    <input type="text" name="formation" placeholder="formation" id="formation" required=""><br><br>
+    <label for="duree">Duree</label><br>
+    <input type="text" name="duree" placeholder="duree" id="duree" required=""><br><br>
+    <label for="info">Description</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="validModifEducation" value="Modifier education"><br><br>
+    </form>';
+}
+elseif(isset($_GET['action']) && $_GET['action'] == "modificationSkill"){
+    echo'
+    <h2>SKILLS</h2>
+    <form method="post">
+    <label for="info">Info</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="validModifSkill" value="Modifier skill"><br><br>
     </form>
     ';
 }

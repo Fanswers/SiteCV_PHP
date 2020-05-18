@@ -4,18 +4,24 @@
       <div class="w-100">
         <h2 class="mb-5">Education</h2>
 
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-          <div class="resume-content">
-            <h3 class="mb-0">University of Colorado Boulder</h3>
-            <div class="subheading mb-3">Bachelor of Science</div>
-            <div>Computer Science - Web Development Track</div>
-            <p>GPA: 3.23</p>
-          </div>
-          <div class="resume-date text-md-right">
-            <span class="text-primary">August 2006 - May 2010</span>
-          </div>
-        </div>
+        <?php 
 
+        $result = $mysqli->query("SELECT * FROM education");
+
+        while($education = $result->fetch_assoc()){ ?>
+          <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
+            <div class="resume-content">
+              <h3 class="mb-0"><?php echo "$education[etablissement]"?></h3>
+              <div class="subheading mb-3"><?php echo "$education[formation]"?></div>
+              <div><?php echo "$education[info]"?></div>
+            </div>
+            <div class="resume-date text-md-right">
+              <span class="text-primary"><?php echo "$education[duree]"?></span>
+            </div>
+          </div>
+
+          <?php
+        }?>
       </div>
     </section>
 

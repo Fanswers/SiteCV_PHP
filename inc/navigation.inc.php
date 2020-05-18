@@ -60,7 +60,7 @@
           <a class="nav-link js-scroll-trigger" href="#awards">Awards</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="connection.php">Connection</a>
+          <a class="nav-link js-scroll-trigger" href="connection.php">Admin</a>
         </li>
       </ul>
     </div>

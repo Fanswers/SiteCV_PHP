@@ -6,8 +6,8 @@
 
         <?php 
 
-        // Affichage (SELECT) :
         $result = $mysqli->query("SELECT * FROM experience");
+        
         while($experience = $result->fetch_assoc()){ ?>
           <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
             <div class="resume-content">

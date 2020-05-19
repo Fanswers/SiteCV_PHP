@@ -28,6 +28,12 @@ elseif(isset($_GET['action']) && $_GET['action'] == "suppressionInterest")
     executeRequete("DELETE FROM interest WHERE id=$_GET[id_produit]");
     $contenu .= '<div class="validation">Suppression interest : ' . $_GET['id_produit'] . '</div>';
     $_GET['action'] = 'affichage';
+}
+elseif(isset($_GET['action']) && $_GET['action'] == "suppressionAwards")
+{   
+    executeRequete("DELETE FROM awards WHERE id=$_GET[id_produit]");
+    $contenu .= '<div class="validation">Suppression award : ' . $_GET['id_produit'] . '</div>';
+    $_GET['action'] = 'affichage';
 } //--- MODIFICATION TABLES ---//
 elseif($_POST and isset($_POST['validModifExperience']))
 {
@@ -44,6 +50,10 @@ elseif($_POST and isset($_POST['validModifSkill']))
 elseif($_POST and isset($_POST['validModifInterest']))
 {
     executeRequete("UPDATE interest SET info='$_POST[info]' WHERE id=$_GET[id_produit]");
+}
+elseif($_POST and isset($_POST['validModifAwards']))
+{
+    executeRequete("UPDATE awards SET info='$_POST[info]' WHERE id=$_GET[id_produit]");
 }
 
 
@@ -63,6 +73,10 @@ elseif($_POST and isset($_POST['ajouterSkill']))
 elseif($_POST and isset($_POST['ajouterInterest']))
     {
         $result = $mysqli->query("INSERT INTO interest (info) VALUES ('$_POST[info]')");
+    }
+elseif($_POST and isset($_POST['ajouterAwards']))
+    {
+        $result = $mysqli->query("INSERT INTO awards (info) VALUES ('$_POST[info]')");
     }
 
 
@@ -209,6 +223,40 @@ if(isset($_GET['action']) && $_GET['action'] == "affichage")
         $contenu .= '</tr>';
     }
     $contenu .= '</table><br><hr><br>';
+
+    //-- Awards --//
+    $resultat = executeRequete("SELECT * FROM awards");
+     
+    $contenu .= '<h2> Awards </h2>';
+    $contenu .= '<table border="1"><tr>';
+     
+    while($colonne = $resultat->fetch_field())
+    {    
+        $contenu .= '<th>' . $colonne->name . '</th>';
+    }
+    $contenu .= '<th>Modification</th>';
+    $contenu .= '<th>Supression</th>';
+    $contenu .= '</tr>';
+ 
+    while ($ligne = $resultat->fetch_assoc())
+    {
+        $contenu .= '<tr>';
+        foreach ($ligne as $indice => $information)
+        {
+            if($indice == "photo")
+            {
+                $contenu .= '<td><img src="' . $information . '" ="70" height="70"></td>';
+            }
+            else
+            {
+                $contenu .= '<td>' . $information . '</td>';
+            }
+        }
+        $contenu .= '<td><a href="?action=modificationAwards&id_produit=' . $ligne['id'] .'">Modifier';
+        $contenu .= '<td><a href="?action=suppressionAwards&id_produit=' . $ligne['id'] .'" OnClick="return(confirm(\'En êtes vous certain ?\'));">Supprimer';
+        $contenu .= '</tr>';
+    }
+    $contenu .= '</table><br><hr><br>';
 }
 
 
@@ -254,6 +302,13 @@ if(isset($_GET['action']) && $_GET['action'] == "ajout"){
     <lable for="info">Info</label><br>
     <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
     <input type="submit" name="ajouterInterest" value="Ajouter interest"><br><br>
+    </form>
+
+    <h2>AWARDS</h2>
+    <form method="post">
+    <lable for="info">Info</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="ajouterAwards" value="Ajouter award"><br><br>
     </form>
     ';
 }//--- FORMULAIRE Modifier ---//
@@ -304,6 +359,16 @@ elseif(isset($_GET['action']) && $_GET['action'] == "modificationInterest"){
     <lable for="info">Info</label><br>
     <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
     <input type="submit" name="validModifInterest" value="Ajouter interest"><br><br>
+    </form>
+    ';
+}
+elseif(isset($_GET['action']) && $_GET['action'] == "modificationAwards"){
+    echo'
+    <h2>AWARDS</h2>
+    <form method="post">
+    <lable for="info">Info</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="validModifAwards" value="Ajouter interest"><br><br>
     </form>
     ';
 }

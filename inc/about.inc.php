@@ -9,20 +9,20 @@
 
 //-----------------------------------------------------------------
 // Affichage (SELECT) :
-$result = $mysqli->query("SELECT * FROM profil WHERE prenom='Alexis'");
-$profil = $result->fetch_assoc(); 
+$result = $mysqli->query("SELECT * FROM membre WHERE prenom='Alexis'");
+$membre = $result->fetch_assoc(); 
 //-----------------------------------------------------------------
 ?>
 
 <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
   <div class="w-100">
-    <h1 class="mb-0"><?php echo "$profil[nom]";?>
-      <span class="text-primary"><?php echo "$profil[prenom]";?></span>
+    <h1 class="mb-0"><?php echo "$membre[nom]";?>
+      <span class="text-primary"><?php echo "$membre[prenom]";?></span>
     </h1>
-    <div class="subheading mb-5"><?php echo "$profil[adresse]";?>
-      <a href="mailto:name@email.com"><?php echo "$profil[mail]";?></a>
+    <div class="subheading mb-5"><?php echo "$membre[adresse]";?>
+      <a href="mailto:name@email.com"><?php echo "$membre[email]";?></a>
     </div>
-    <p class="lead mb-5"><?php echo "$profil[description]";?></p>
+    <p class="lead mb-5"><?php echo "$membre[info]";?></p>
     <div class="social-icons">
       <a href="#">
         <i class="fab fa-linkedin-in"></i>

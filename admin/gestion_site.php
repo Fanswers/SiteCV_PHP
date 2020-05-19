@@ -5,7 +5,13 @@ require_once("../inc/init.inc.php");
 if(!internauteEstConnecteEtEstAdmin()) header("location:../index.php");
 
 //--- SUPPRESSION TABLES ---//
-if(isset($_GET['action']) && $_GET['action'] == "suppressionExperience")
+if(isset($_GET['action']) && $_GET['action'] == "suppressionMembre")
+{   
+    executeRequete("DELETE FROM membre WHERE id=$_GET[id_produit]");
+    $contenu .= '<div class="validation">Suppression membre : ' . $_GET['id_produit'] . '</div>';
+    $_GET['action'] = 'affichage';
+}
+elseif(isset($_GET['action']) && $_GET['action'] == "suppressionExperience")
 {   
     executeRequete("DELETE FROM experience WHERE id=$_GET[id_produit]");
     $contenu .= '<div class="validation">Suppression experience : ' . $_GET['id_produit'] . '</div>';
@@ -35,6 +41,10 @@ elseif(isset($_GET['action']) && $_GET['action'] == "suppressionAwards")
     $contenu .= '<div class="validation">Suppression award : ' . $_GET['id_produit'] . '</div>';
     $_GET['action'] = 'affichage';
 } //--- MODIFICATION TABLES ---//
+elseif($_POST and isset($_POST['validModifMembre']))
+{
+    executeRequete("UPDATE membre SET nom='$_POST[nom]', prenom='$_POST[prenom]', adresse='$_POST[adresse]', email='$_POST[email]', info='$_POST[info]' WHERE id=$_GET[id_produit]" );
+}
 elseif($_POST and isset($_POST['validModifExperience']))
 {
     executeRequete("UPDATE experience SET poste='$_POST[poste]', employeur='$_POST[employeur]', duree='$_POST[duree]', info='$_POST[info]' WHERE id=$_GET[id_produit]");
@@ -58,7 +68,7 @@ elseif($_POST and isset($_POST['validModifAwards']))
 
 
 //--- ENREGISTREMENT TABLES ---//
-if($_POST and isset($_POST['ajouterExperience']))
+elseif($_POST and isset($_POST['ajouterExperience']))
     {
         $result = $mysqli->query("INSERT INTO experience (poste, employeur, duree, info) VALUES ('$_POST[poste]', '$_POST[employeur]', '$_POST[duree]', '$_POST[info]')");
     }
@@ -81,13 +91,49 @@ elseif($_POST and isset($_POST['ajouterAwards']))
 
 
 //--- LIENS ---//
-$contenu .= '<a href="?action=affichage">Afficher</a><br>';
-$contenu .= '<a href="?action=ajout">Ajouter</a><br><br><hr><br>';
+
+$contenu .= '<button><a href="../index.php">retour</a></button><br>';
+$contenu .= '<button><a href="?action=affichage">Afficher</a><button/><br>';
+$contenu .= '<button><a href="?action=ajout">Ajouter</a></button><br><br><hr><br>';
+
+
 
 
 //--- AFFICHAGE DES TABLES ---//
 if(isset($_GET['action']) && $_GET['action'] == "affichage")
 {
+    //-- About --//
+    $resultat = executeRequete("SELECT * FROM membre");
+     
+    $contenu .= '<h2> About </h2>';
+    $contenu .= '<table border="1"><tr>';
+     
+    while($colonne = $resultat->fetch_field())
+    {    
+        $contenu .= '<th>' . $colonne->name . '</th>';
+    }
+    $contenu .= '<th>Modification</th>';
+    $contenu .= '</tr>';
+ 
+    while ($ligne = $resultat->fetch_assoc())
+    {
+        $contenu .= '<tr>';
+        foreach ($ligne as $indice => $information)
+        {
+            if($indice == "photo")
+            {
+                $contenu .= '<td><img src="' . $information . '" ="70" height="70"></td>';
+            }
+            else
+            {
+                $contenu .= '<td>' . $information . '</td>';
+            }
+        }
+        $contenu .= '<td><a href="?action=modificationMembre&id_produit=' . $ligne['id'] .'">Modifier';
+        $contenu .= '</tr>';
+    }
+    $contenu .= '</table><br><hr><br>';
+
     //-- Experiences --//
     $resultat = executeRequete("SELECT * FROM experience");
      
@@ -312,6 +358,23 @@ if(isset($_GET['action']) && $_GET['action'] == "ajout"){
     </form>
     ';
 }//--- FORMULAIRE Modifier ---//
+elseif(isset($_GET['action']) && $_GET['action'] == "modificationMembre"){
+    echo'
+    <h2>ABOUT</h2>
+    <form method="post">
+    <label for="nom">Nom</label><br>
+    <input type="text" name="nom" placeholder="nom" id="nom" required=""><br><br>
+    <label for="prenom">Prenom</label><br>
+    <input type="text" name="prenom" placeholder="prenom" id="prenom" required=""><br><br>
+    <label for="adresse">Adresse</label><br>
+    <input type="text" name="adresse" placeholder="adresse" id="adresse" required=""><br><br>
+    <label for="email">Email</label><br>
+    <input type="text" name="email" placeholder="email" id="email" required=""><br><br>
+    <label for="info">Description</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="validModifMembre" value="Ajouter membre"><br><br>
+    </form>';
+}
 elseif(isset($_GET['action']) && $_GET['action'] == "modificationExperience"){
     echo'
     <h2>EXPERIENCES</h2>

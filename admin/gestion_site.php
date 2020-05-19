@@ -22,7 +22,13 @@ elseif(isset($_GET['action']) && $_GET['action'] == "suppressionSkill")
     executeRequete("DELETE FROM skills WHERE id=$_GET[id_produit]");
     $contenu .= '<div class="validation">Suppression skill : ' . $_GET['id_produit'] . '</div>';
     $_GET['action'] = 'affichage';
-} //--- Modifications tables ---//
+}
+elseif(isset($_GET['action']) && $_GET['action'] == "suppressionInterest")
+{   
+    executeRequete("DELETE FROM interest WHERE id=$_GET[id_produit]");
+    $contenu .= '<div class="validation">Suppression interest : ' . $_GET['id_produit'] . '</div>';
+    $_GET['action'] = 'affichage';
+} //--- MODIFICATION TABLES ---//
 elseif($_POST and isset($_POST['validModifExperience']))
 {
     executeRequete("UPDATE experience SET poste='$_POST[poste]', employeur='$_POST[employeur]', duree='$_POST[duree]', info='$_POST[info]' WHERE id=$_GET[id_produit]");
@@ -34,6 +40,10 @@ elseif($_POST and isset($_POST['validModifEducation']))
 elseif($_POST and isset($_POST['validModifSkill']))
 {
     executeRequete("UPDATE skills SET info='$_POST[info]' WHERE id=$_GET[id_produit]");
+}
+elseif($_POST and isset($_POST['validModifInterest']))
+{
+    executeRequete("UPDATE interest SET info='$_POST[info]' WHERE id=$_GET[id_produit]");
 }
 
 
@@ -49,6 +59,10 @@ elseif($_POST and isset($_POST['ajouterEducation']))
 elseif($_POST and isset($_POST['ajouterSkill']))
     {
         $result = $mysqli->query("INSERT INTO skills (info) VALUES ('$_POST[info]')");
+    }
+elseif($_POST and isset($_POST['ajouterInterest']))
+    {
+        $result = $mysqli->query("INSERT INTO interest (info) VALUES ('$_POST[info]')");
     }
 
 
@@ -161,10 +175,44 @@ if(isset($_GET['action']) && $_GET['action'] == "affichage")
         $contenu .= '</tr>';
     }
     $contenu .= '</table><br><hr><br>';
+
+    //-- Interests --//
+    $resultat = executeRequete("SELECT * FROM interest");
+     
+    $contenu .= '<h2> Interests </h2>';
+    $contenu .= '<table border="1"><tr>';
+     
+    while($colonne = $resultat->fetch_field())
+    {    
+        $contenu .= '<th>' . $colonne->name . '</th>';
+    }
+    $contenu .= '<th>Modification</th>';
+    $contenu .= '<th>Supression</th>';
+    $contenu .= '</tr>';
+ 
+    while ($ligne = $resultat->fetch_assoc())
+    {
+        $contenu .= '<tr>';
+        foreach ($ligne as $indice => $information)
+        {
+            if($indice == "photo")
+            {
+                $contenu .= '<td><img src="' . $information . '" ="70" height="70"></td>';
+            }
+            else
+            {
+                $contenu .= '<td>' . $information . '</td>';
+            }
+        }
+        $contenu .= '<td><a href="?action=modificationInterest&id_produit=' . $ligne['id'] .'">Modifier';
+        $contenu .= '<td><a href="?action=suppressionInterest&id_produit=' . $ligne['id'] .'" OnClick="return(confirm(\'En êtes vous certain ?\'));">Supprimer';
+        $contenu .= '</tr>';
+    }
+    $contenu .= '</table><br><hr><br>';
 }
 
 
-//--------------------------------- AFFICHAGE HTML ---------------------------------//
+//--------------------------------- FORMULAIRE Ajouter ---------------------------------//
 echo $contenu;
 if(isset($_GET['action']) && $_GET['action'] == "ajout"){
     echo'
@@ -200,8 +248,15 @@ if(isset($_GET['action']) && $_GET['action'] == "ajout"){
     <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
     <input type="submit" name="ajouterSkill" value="Ajouter skill"><br><br>
     </form>
+
+    <h2>INTERESTS</h2>
+    <form method="post">
+    <lable for="info">Info</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="ajouterInterest" value="Ajouter interest"><br><br>
+    </form>
     ';
-}
+}//--- FORMULAIRE Modifier ---//
 elseif(isset($_GET['action']) && $_GET['action'] == "modificationExperience"){
     echo'
     <h2>EXPERIENCES</h2>
@@ -242,6 +297,15 @@ elseif(isset($_GET['action']) && $_GET['action'] == "modificationSkill"){
     </form>
     ';
 }
+elseif(isset($_GET['action']) && $_GET['action'] == "modificationInterest"){
+    echo'
+    <h2>INTERESTS</h2>
+    <form method="post">
+    <lable for="info">Info</label><br>
+    <input type="text" name="info" placeholder="info" id="info" required=""><br><br>
+    <input type="submit" name="validModifInterest" value="Ajouter interest"><br><br>
+    </form>
+    ';
+}
 ?>
-
 
